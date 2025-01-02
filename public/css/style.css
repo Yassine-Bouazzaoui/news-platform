@@ -1,0 +1,79 @@
+.card {
+    margin-top: 30px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card-title {
+    transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+
+.card-title:hover {
+    color: #007bff;
+    text-decoration: underline;
+}
+
+.reactions i, .views i {
+    cursor: pointer;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.reactions i:hover, .views i:hover {
+    transform: scale(1.2);
+}
+.reactions i:hover, .views i:hover {
+    transform: scale(1.2);
+}
+.likes i:hover {
+    color: #28a745;
+}
+
+.likes:hover{
+    color: #28a745;
+    
+}
+.dislikes:hover{
+    color: #dc3545;
+}
+.dislikes i:hover {
+    color: #dc3545;
+}
+
+.views:hover, .views i:hover {
+    color: #851de6;
+}
+
+.card-info {
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+    border-bottom: 1px solid #dee2e6;
+    font-size: 0.9rem;
+    color: #6c757d;
+    padding: 10px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.card-info span {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.card-info i {
+    margin-right: 5px;
+    color: #007bff;
+    transition: color 0.3s ease;
+}
+
+.card-info:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.card-info:hover i {
+    color: #fff;
+}

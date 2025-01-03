@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,43 +11,68 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" href="/">News App</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/news.html">Articles</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/create.html">Créer</a>
-                    </li>
-                </ul>
-            </div>
+    <nav id="sidebar" class="d-flex flex-column">
+        <div class="profile">
+            <img src="https://via.placeholder.com/80" alt="Profile">
+            <p>_yassine.bou_</p>
         </div>
+        <a href="/"><i class="fas fa-home me-2"></i> Accueil</a>
+        <a href="/search"><i class="fas fa-search me-2"></i> Recherche</a>
+        <a href="/discover"><i class="fas fa-compass me-2"></i> Découvrir</a>
+        <a href="/reels"><i class="fas fa-video me-2"></i> Reels</a>
+        <a href="/messages"><i class="fas fa-envelope me-2"></i> Messages</a>
+        <a href="/notifications"><i class="fas fa-bell me-2"></i> Notifications</a>
+        <a href="/create"><i class="fas fa-plus-circle me-2"></i> Créer</a>
+        <a href="/profile"><i class="fas fa-user me-2"></i> Profil</a>
     </nav>
 
-   
-    <main class="container mt-4">
-        <h1>Bienvenue sur News App</h1>
-        <p>Consultez les dernières actualités ou créez vos propres articles.</p>
-        
-      
-        <section id="latest-news" class="mt-4">
-            <h2>Derniers Articles</h2>
-            <div id="news-container" class="row">
-                
+    <div id="content">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="/">News App</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/news.html">Articles</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/create.html">Créer</a>
+                        </li>
+                    </ul>
+                    <button id="login-button" class="btn btn-secondary ms-auto">
+                        <i class="fas fa-sign-in-alt"></i> Se Connecter
+                    </button>
+                </div>
             </div>
-        </section>
-    </main>
+        </nav>
 
+        <main class="container mt-4 d-flex">
+            <div class="flex-grow-1">
+                <div id="error-container"></div>
+                <h1>Bienvenue sur News App</h1>
+                <p>Consultez les dernières actualités ou créez vos propres articles.</p>
+
+                <section id="latest-news" class="mt-4">
+                    <h2>Derniers Articles</h2>
+                    <div id="news-container">
+                        <!-- Les articles seront ajoutés ici dynamiquement -->
+                    </div>
+                </section>
+            </div>
+            <aside id="right-sidebar" class="ms-4">
+                <h3>Comptes Suggérés</h3>
+                <div id="suggested-accounts">
+
+                </div>
+            </aside>
+        </main>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/public/js/main.js"></script>
-
-    
 </body>
+
 </html>

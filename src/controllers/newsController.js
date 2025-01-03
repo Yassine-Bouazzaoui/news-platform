@@ -17,8 +17,16 @@ const newsController = {
     },
 
     async createNews(req, res) {
-        // TODO: Implémenter la création d'un article
+        
+    },
+
+    async updateNews(req, res) {
+        res.status(501).json({ message: 'La modification des articles n’est pas encore implémentée.' });
+    },
+    async deleteNews(req, res) {
+        res.status(501).json({ message: 'La suppression des articles n’est pas encore implémentée.' });
     }
+    
 };
 
 module.exports = newsController;

@@ -1,68 +1,96 @@
-const { body, validationResult } = require('express-validator');
-
 const axios = require('axios');
 
-const DUMMY_JSON_URL = 'https://dummyjson.com/posts';
-
 const newsController = {
+    async createNews(req, res) {
+        const { title, body, userId } = req.body;
+
+        try {
+            const userResponse = await axios.get(`https://dummyjson.com/users/${userId}`);
+            if (!userResponse.data) {
+                return res.status(400).json({ message: 'User not found' });
+            }
+
+            const postResponse = await axios.post('https://dummyjson.com/posts/add', {
+                title,
+                body,
+                userId
+            });
+
+            res.status(201).json({ message: 'Article created successfully', news: postResponse.data });
+        } catch (error) {
+            console.error('Detailed article creation error:', error.response ? error.response.data : error.message);
+            res.status(500).json({ message: 'Internal server error', error: error.response ? error.response.data : error.message });
+        }
+    },
+
     async getAllNews(req, res) {
         try {
-            const response = await axios.get(DUMMY_JSON_URL);
-            res.status(200).json(response.data);
+            const response = await axios.get('https://dummyjson.com/posts');
+            const posts = response.data.posts;
+
+            posts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+            const recentPosts = posts.slice(0, 10);
+
+            const postsWithUserImages = await Promise.all(recentPosts.map(async post => {
+                const userResponse = await axios.get(`https://dummyjson.com/users/${post.userId}`);
+                return {
+                    ...post,
+                    userImage: userResponse.data.image
+                };
+            }));
+
+            res.status(200).json({ posts: postsWithUserImages });
         } catch (error) {
-            res.status(500).json({ message: 'Erreur serveur' });
+            console.error('Detailed fetching error:', error.response ? error.response.data : error.message);
+            res.status(500).json({ message: 'Internal server error', error: error.response ? error.response.data : error.message });
         }
     },
 
     async getNewsById(req, res) {
+        const { id } = req.params;
         try {
-            const { id } = req.params;
-            const response = await axios.get(`${DUMMY_JSON_URL}/${id}`);
-            res.status(200).json(response.data);
-        } catch (error) {
-            res.status(500).json({ message: 'Erreur serveur' });
-        }
-    },
+            const response = await axios.get(`https://dummyjson.com/posts/${id}`);
+            const post = response.data;
 
-    async createNews(req, res) {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
+            const userResponse = await axios.get(`https://dummyjson.com/users/${post.userId}`);
+            post.userImage = userResponse.data.image;
 
-        try {
-            const newPost = req.body;
-            const response = await axios.post(DUMMY_JSON_URL, newPost);
-            res.status(201).json(response.data);
+            res.status(200).json(post);
         } catch (error) {
-            res.status(500).json({ message: 'Erreur serveur' });
+            console.error('Detailed fetching error:', error.response ? error.response.data : error.message);
+            res.status(500).json({ message: 'Internal server error', error: error.response ? error.response.data : error.message });
         }
     },
 
     async updateNews(req, res) {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
+        const { id } = req.params;
+        const { title, body } = req.body;
 
         try {
-            const { id } = req.params;
-            const updatedPost = req.body;
-            const response = await axios.put(`${DUMMY_JSON_URL}/${id}`, updatedPost);
+            const response = await axios.put(`https://dummyjson.com/posts/${id}`, {
+                title,
+                body
+            });
+
             res.status(200).json(response.data);
         } catch (error) {
-            res.status(500).json({ message: 'Erreur serveur' });
+            console.error('Detailed updating error:', error.response ? error.response.data : error.message);
+            res.status(500).json({ message: 'Internal server error', error: error.response ? error.response.data : error.message });
         }
     },
 
     async deleteNews(req, res) {
+        const { id } = req.params;
+
         try {
-            const { id } = req.params;
-            await axios.delete(`${DUMMY_JSON_URL}/${id}`);
+            await axios.delete(`https://dummyjson.com/posts/${id}`);
             res.status(204).send();
         } catch (error) {
-            res.status(500).json({ message: 'Erreur serveur' });
+            console.error('Detailed deletion error:', error.response ? error.response.data : error.message);
+            res.status(500).json({ message: 'Internal server error', error: error.response ? error.response.data : error.message });
         }
     }
 };
+
 module.exports = newsController;

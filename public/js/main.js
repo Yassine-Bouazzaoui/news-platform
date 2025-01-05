@@ -8,16 +8,28 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+async function fetchArticles() {
+    try {
+        const response = await fetch('https://dummyjson.com/posts');
+        const data = await response.json();
+        return data.posts;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des articles :', error);
+        return [];
+    }
+}
 async function fetchLatestNews() {
     try {
         const response = await fetch('https://dummyjson.com/posts');
         const data = await response.json();
-        displayNews(data.posts);
+        // Trier les articles par date de création (si disponible) ou par ID
+        return data.posts.sort((a, b) => b.id - a.id).slice(0, 10); // Les 10 derniers articles
     } catch (error) {
-        console.error('Erreur:', error);
-        showError('Impossible de charger les articles');
+        console.error('Erreur lors de la récupération des derniers articles :', error);
+        return [];
     }
 }
+
 
 async function fetchSuggestedAccounts() {
     try {

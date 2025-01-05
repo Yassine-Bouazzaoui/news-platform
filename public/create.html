@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/public/css/create.css">
+    <title>Créer un Article</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">News App</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="news.html">Nouveaux Articles</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="create.html">Créer</a>
+                    </li>
+                    <li id="connecter" class="nav-item">
+                        <a class="nav-link" href="login.html">Se connecter</a>
+                    </li>
+                </ul>
+                <div id="auth-buttons" class="d-flex ms-auto">
+                        
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">Créer un Nouvel Article</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="create-article-form">
+                            <div class="mb-3">
+                                <label for="title" class="form-label">Titre</label>
+                                <input type="text" class="form-control" id="title" placeholder="Entrez le titre de l'article" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="body" class="form-label">Contenu</label>
+                                <textarea class="form-control" id="body" rows="6" placeholder="Entrez le contenu de l'article" required></textarea>
+                            </div>
+                            <div id="error-message" class="alert alert-danger d-none"></div>
+                            <div id="success-message" class="alert alert-success d-none"></div>
+                            <div class="d-flex justify-content-between">
+                                <button type="submit" class="btn btn-primary">Publier</button>
+                                <button type="button" class="btn btn-secondary" onclick="window.location.href='news.html'">Annuler</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async function () {
+            const isAuthenticated = localStorage.getItem('isAuthenticated');
+            const username = localStorage.getItem('username');
+            const authButtons = document.getElementById('auth-buttons');
+            const userName = document.getElementById('user');
+
+            if (isAuthenticated === 'true') {
+                const username = localStorage.getItem('username');
+                document.getElementById('connecter').style.display = 'none';
+                authButtons.innerHTML = `
+                    <span class="navbar-text me-3"></span>
+                    <button id="logout-button" class="btn btn-secondary">
+                        <i class="fas fa-sign-out-alt"></i> Se Déconnecter
+                    </button>
+                `;
+
+                document.getElementById('logout-button').addEventListener('click', function () {
+                    localStorage.removeItem('isAuthenticated');
+                    localStorage.removeItem('userId');
+                    localStorage.removeItem('username');
+                    window.location.href = 'index.html';
+                    if (userName) {
+                        userName.innerText = "Invité";
+                    }
+                });
+            }
+            
+        });
+    </script>
+
+    <script src="/public/js/create.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

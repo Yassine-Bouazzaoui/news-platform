@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/public/css/new.css">
+    <title>Articles</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">News App</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="news.html">Nouveaux Articles</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="create.html">Créer</a>
+                    </li>
+                    <li id="connecter" class="nav-item">
+                        <a class="nav-link" href="login.html">Se connecter</a>
+                    </li>
+                </ul>
+                <div id="auth-buttons" class="d-flex ms-auto">
+                        
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="d-flex">
+        <nav id="sidebar" class="bg-dark text-white p-3">
+            <div class="profile text-center mb-4">
+                <img src="https://via.placeholder.com/80" alt="Profile" class="rounded-circle">
+                <p id="user" class="mt-2">User Name</p>
+            </div>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/"><i class="fas fa-home me-2"></i> Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/search"><i class="fas fa-search me-2"></i> Recherche</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/discover"><i class="fas fa-compass me-2"></i> Découvrir</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/reels"><i class="fas fa-video me-2"></i> Reels</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/messages"><i class="fas fa-envelope me-2"></i> Messages</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/notifications"><i class="fas fa-bell me-2"></i> Notifications</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/create"><i class="fas fa-plus-circle me-2"></i> Créer</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/profile"><i class="fas fa-user me-2"></i> Profil</a>
+                </li>
+            </ul>
+        </nav>
+
+        <div id="content" class="p-4">
+            <div class="container mt-5">
+                <h2>Nouveaux Articles</h2>
+                <div class="row" id="news-container">
+                    <!-- Les articles seront insérés ici -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            const isAuthenticated = localStorage.getItem('isAuthenticated');
+            const authButtons = document.getElementById('auth-buttons');
+            const userName = document.getElementById('user');
+
+            if (isAuthenticated === 'true') {
+                const username = localStorage.getItem('username');
+                document.getElementById('connecter').style.display = 'none';
+                authButtons.innerHTML = `
+                    <span class="navbar-text me-3">${username}</span>
+                    <button id="logout-button" class="btn btn-secondary">
+                        <i class="fas fa-sign-out-alt"></i> Se Déconnecter
+                    </button>
+                `;
+                if (userName) {
+                    userName.innerHTML = username;
+                }
+
+                document.getElementById('logout-button').addEventListener('click', function () {
+                    localStorage.removeItem('isAuthenticated');
+                    localStorage.removeItem('userId');
+                    localStorage.removeItem('username');
+                    window.location.href = 'index.html';
+                    if (userName) {
+                        userName.innerText = "Invité";
+                    }
+                });
+            }
+            try {
+                const response = await fetch('http://localhost:3000/api/news');
+                const data = await response.json();
+                displayNews(data.posts);
+            } catch (error) {
+                console.error('Error fetching articles:', error);
+            }
+            
+        });
+
+        function displayNews(newsData) {
+            const newsContainer = document.getElementById('news-container');
+            newsContainer.innerHTML = '';
+
+            newsData.forEach(post => {
+                const postCard = `
+                    <div class="col-md-4 mb-4">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <img src="${post.userImage}" alt="User Image" class="user-image rounded-circle me-2" style="width: 40px; height: 40px;">
+                                    <h5 class="card-title mb-0">${post.title}</h5>
+                                </div>
+                                <p class="card-text">${post.body}</p>
+                                <p class="card-text"><small class="text-muted">Publié le ${new Date(post.createdAt).toLocaleDateString()}</small></p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <button class="btn btn-light btn-sm me-2">
+                                            <i class="fas fa-thumbs-up"></i> ${post.likes}
+                                        </button>
+                                        <button class="btn btn-light btn-sm">
+                                            <i class="fas fa-thumbs-down"></i> ${post.dislikes}
+                                        </button>
+                                    </div>
+                                    <button class="btn btn-light btn-sm save-button">
+                                        <i class="fas fa-bookmark"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                newsContainer.innerHTML += postCard;
+            });
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

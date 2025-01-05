@@ -1,5 +1,5 @@
 # Application de News - TP Technologies Web
-# Par [Votre Nom et prénom]
+# Par Bouazzaoui Yassine
 
 ## Description
 Cette application permet de :
@@ -26,7 +26,7 @@ Commençons par l'organisation pratique :
    git remote remove origin
    
    # Ajoutez votre dépôt comme nouvelle origine
-   git remote add origin https://github.com/[votre-compte]/news-platform
+   git remote add origin https://github.com/Yassine-Bouazzaoui/news-platform
    
    # Poussez le code vers votre dépôt
    git push -u origin main
